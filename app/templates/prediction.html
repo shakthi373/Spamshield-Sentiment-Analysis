@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Page</title>
+    <link rel="icon" type="image/x-icon" href="static/img/icon.jpg">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: url("../static/img/bg123.png");
+            background-size: cover;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            padding-top: 20px;
+        }
+        .navbar {
+            backdrop-filter: blur(100px);
+            border-bottom: 4px solid #9a8c98;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #f7c6c7;
+            text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.7);
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .navbar-toggler {
+            border: none;
+        }
+        .navbar-toggler-icon {
+            background-color: #fff;
+            border-radius: 4px;
+            height: 3px;
+            width: 25px;
+        }
+        .container {
+            margin-top: 30px;
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid #e1e5e9;
+        }
+        .form-control, .btn-primary {
+            border-radius: 25px;
+        }
+        .form-control:focus {
+            border-color: #4a4e69;
+            box-shadow: 0 0 0 0.2rem rgba(74, 78, 105, 0.25);
+        }
+        .btn-primary {
+            background-color: #4a4e69;
+            border: none;
+            font-weight: bold;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #2c2f3f;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #4a4e69;
+        }
+        .result-table {
+            margin-top: 30px;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 1.1em;
+        }
+        .result-table th, .result-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .result-table th {
+            background-color: #4a4e69;
+            color: white;
+            font-weight: bold;
+        }
+        .result-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .navbar-brand {
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-family: 'Georgia', serif;
+        }
+        .result-container h2 {
+            color: #4a4e69;
+            font-weight: bold;
+            font-size: 2em;
+            text-shadow: 2px 2px 5px rgba(74, 78, 105, 0.5);
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+        }
+        .result-container h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 5px;
+            width: 50px;
+            background: linear-gradient(90deg, #f7c6c7, #4a4e69);
+            border-radius: 5px;
+        }
+        h2:hover {
+            color: #feb47b;
+            text-shadow: 4px 4px 10px rgba(255, 126, 95, 0.7);
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            margin: 0 auto;
+            margin-top: 10px;
+            border-radius: 2px;
+        }
+        #sentimentPieChart {
+            max-width: 300px;
+            max-height: 300px;
+            margin: 0 auto;
+        }
+        .btn-export {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4a4e69;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .btn-export:hover {
+            background-color: #2c2f3f;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .hidden {
+            display: none;
+        }
+        /* Sentiment Distribution Section Styling */
+.text-center {
+    text-align: center;
+}
+
+/* Title and Description Styling */
+h3 {
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+p {
+    font-size: 16px;
+    color: #777;
+    font-weight: 400;
+}
+
+/* Chart Styling */
+#sentimentPieChart {
+    max-width: 100%;
+    height: 400px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Legend Styling */
+#sentimentLegend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#sentimentLegend li {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#sentimentLegend li span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/">
+            <i class="fab fa-youtube" style="font-size: 1.5em; margin-right: 8px;"></i>
+            Spamshield Sentiment Analyzer
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                
+                <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                <li class="nav-item"></li>
+                    <a href="/contactus" class="nav-link">ContactUS</a>
+                <li class="nav-item">
+                    <form action="/logout" method="post">
+                        <li class="nav-item"><a class="nav-link" href="landing">Logout</a></li>
+                    </form>                    
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="text-center mb-4" style="color: #35486f; font-weight: bold; font-size: 2.5em; text-shadow: 2px 2px 5px rgba(255, 126, 95, 0.5); font-family: 'Comic Sans MS', cursive, sans-serif;">
+            Youtube Video Sentiment Analyser
+        </h2>
+        <form action="/upload" method="post">
+            <div class="form-group">
+                <label for="searchBox">Enter Youtube Video URL:</label>
+                <input type="url" class="form-control" id="searchBox" name="search" placeholder="Enter your url here (must start with http or https)..." pattern="https?://.*" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        
+
+        {% if error %}
+        <p class="text-center" style="color: red;">{{error}}</p>
+        {% endif %}
+
+        {% if video_id %}
+        <div class="result-container">
+            <h2 class="text-center">Results</h2>
+            <table class="result-table" id="resultTable">
+                <tr>
+                    <th>Youtube Video URL ID</th>
+                    <td>{{ video_id }}</td>
+                </tr>
+                <tr>
+                    <th>Total Comments Fetched</th>
+                    <td>{{ total_comments_fetched }}</td> <!-- Show total fetched comments -->
+                </tr>
+                <tr>
+                    <th>Comments After Spam Filtering</th>
+                    <td>{{ total_comments_filtered }}</td> <!-- Show how many comments were filtered -->
+                </tr>
+                <tr>
+                    <th>Positive Comments</th>
+                    <td>{{ positive_percentage }}%</td>
+                </tr>
+                <tr>
+                    <th>Neutral Comments</th>
+                    <td>{{ neutral_percentage }}%</td>
+                </tr>
+                <tr>
+                    <th>Negative Comments</th>
+                    <td>{{ negative_percentage }}%</td>
+                </tr>
+            
+            </table>
+            <!-- Export Button -->
+            <button class="btn-export" onclick="exportTableToCSV('results.csv')">Export to CSV</button>
+        </div>
+          <!-- Trigger Button -->
+<center><tr>
+    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#videoModal">Watch Video</button></td>
+</tr></center>
+               <!-- Sentiment Distribution Section -->
+               <div class="text-center mt-5">
+                <!-- Section Title -->
+                <h3 class="mb-4" style="font-size: 24px; font-weight: bold;">Sentiment Distribution</h3>
+                
+                
+                <!-- Pie Chart Canvas -->
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <canvas id="sentimentPieChart"></canvas>
+                </div>
+            </div>
+<!-- Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">YouTube Video</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="video-container" class="embed-responsive embed-responsive-16by9">
+                    <iframe id="videoIframe" class="embed-responsive-item" 
+                            src="https://www.youtube.com/embed/{{ video_id }}" 
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                    
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="https://www.youtube.com/watch?v={{ video_id }}" target="_blank" class="btn btn-primary">Watch on YouTube</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#spamSentimentTab">Spam Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#emotionTab">Sentiment Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#limeTab">Explainable AI</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Spam Analysis Tab -->
+        <div id="spamSentimentTab" class="tab-pane active mt-3">
+            <h4>Spam Analysis</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Comment</th>
+                        <th>Spam Prediction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in comments_data %}
+                    <tr>
+                        <td>{{ comment.comment }}</td>
+                        <td>{{ comment.spam_prediction }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sentiment Analysis Tab -->
+        <div id="emotionTab" class="tab-pane fade mt-3">
+            <h4>Sentiment Analysis</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Comment</th>
+                        <th>Sentiment Prediction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in comments_data %}
+                    <tr>
+                        <td>{{ comment.comment }}</td>
+                        <td>{{ comment.sentiment_prediction }}</td>
+                        <td>
+                            <button class="btn btn-info" onclick="analyzeEmotion('{{ comment.comment }}')">
+                                Analyze Emotion
+                            </button>
+                        </td>
+                        <td>
+                            <div class="inlineEmotionResult"></div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                   
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Explainable AI Tab -->
+        <div id="limeTab" class="tab-pane fade mt-3">
+    <h4>Explainable AI (LIME)</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Comment</th>
+                <th>Spam Explanation</th>
+                <th>Sentiment Explanation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comments_data %}
+            <tr>
+                <td>{{ comment.comment }}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="analyzeLIME('{{ comment.comment }}', 'spam')">
+                        Explain Spam
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-secondary" onclick="analyzeLIME('{{ comment.comment }}', 'sentiment')">
+                        Explain Sentiment
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    </div>
+</div>
+{% endif %}
+</div>  
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        
+const sentimentData = {
+    labels: ['Positive', 'Negative', 'Neutral'], // Sentiment categories
+    datasets: [{
+        data: [50, 30, 20], // Sentiment distribution values
+        backgroundColor: ['#34D399', '#EF4444', '#F59E0B'], // Color for each sentiment
+        hoverOffset: 4
+    }]
+};
+
+// Create the pie chart
+const ctx = document.getElementById('sentimentPieChart').getContext('2d');
+const sentimentPieChart = new Chart(ctx, {
+    type: 'pie',
+    data:  {
+                labels: ['Positive', 'Neutral', 'Negative'],
+                datasets: [{
+                    label: 'Sentiment Distribution',
+                    data: [{{ positive_percentage }}, {{ neutral_percentage }}, {{ negative_percentage }}], // Data
+                    backgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'], // Colors
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+           },
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return `${tooltipItem.label}: ${tooltipItem.raw}%`; // Show percentage on hover
+                    }
+                }
+            }
+        }
+    }
+});
+document.getElementById('videoIframe').addEventListener('load', function() {
+    document.getElementById('loading-spinner').style.display = 'none';
+});
+
+document.getElementById('videoModal').addEventListener('show.bs.modal', function () {
+    document.getElementById('loading-spinner').style.display = 'block';
+});
+
+// Dynamically generate legend
+const legend = document.getElementById('sentimentLegend');
+const sentimentLabels = sentimentData.labels;
+const sentimentColors = sentimentData.datasets[0].backgroundColor;
+
+sentimentLabels.forEach((label, index) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+        <span style="background-color: ${sentimentColors[index]}"></span>
+        ${label}: ${sentimentData.datasets[0].data[index]}%
+    `;
+    legend.appendChild(li);
+});
+
+
+// Function to get comment count based on sentiment
+function getCommentCount(label) {
+    const totalComments = {{ total_comments_fetched }};
+    const percentages = {
+        'Positive': {{ positive_percentage }},
+        'Neutral': {{ neutral_percentage }},
+        'Negative': {{ negative_percentage }}
+    };
+    return Math.round(totalComments * (percentages[label] / 100));
+}
+
+
+        // Function to export table data to CSV
+        function exportTableToCSV(filename) {
+            let csv = [];
+            let rows = document.querySelectorAll('#resultTable tr');
+            let rows1= document.querySelectorAll('#table')
+            for (let row of rows) {
+                let cols = row.querySelectorAll('td, th');
+                let csvRow = [];
+                for (let col of cols) {
+                    csvRow.push('"' + col.innerText.replace(/"/g, '""') + '"');
+                }
+                csv.push(csvRow.join(','));
+            }
+            for (let rows of rows1) {
+                let cols=rows.querySelectorAll('td, th');
+                let csvRow =[];
+                for (let col of cols) {
+                    csvRow.push('"' + col.innerText.replace(/"/g,'""')+ '"');
+                }
+                csv.push(csvRow.join(','));
+            }
+            
+            let csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+            let downloadLink = document.createElement('a');
+            downloadLink.download = filename;
+            downloadLink.href = URL.createObjectURL(csvFile);
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+        async function analyzeEmotion(comment) {
+    try {
+        const response = await fetch('/predict_emotion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: comment })
+        });
+        const data = await response.json();
+        const probabilities = data.probabilities;
+        const maxConfidence = Math.max(...Object.values(probabilities)).toFixed(2);
+
+        // Construct the alert message
+        const alertMessage = `
+Emotion Analysis Result:
+- Comment: ${comment}
+- Predicted Emotion: ${data.emotion}
+- Confidence: ${maxConfidence}
+        `;
+
+        // Show the result as an alert
+        alert(alertMessage);
+    } catch (error) {
+        console.error("Error analyzing emotion:", error);
+        alert("An error occurred while analyzing emotion. Please try again.");
+    }
+}
+
+async function analyzeLIME(comment, type) {
+    // Determine API endpoint based on the type of explanation
+    let apiEndpoint = type === 'spam' ? '/explain_spam' : '/explain_sentiment';
+
+    try {
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: comment })
+        });
+        const data = await response.json();
+
+        // Extract the explanation and label
+        let explanation = data[type === 'spam' ? 'spam_explanation' : 'sentiment_explanation']
+            .map(([feature, weight]) => `${feature}: ${weight.toFixed(2)}`)
+            .join('\n');
+        let label = data.label || (type === 'spam' ? 'Not Spam' : 'Neutral'); // Default label if not provided
+
+        // Display explanation as an alert
+        alert(
+            `${type.charAt(0).toUpperCase() + type.slice(1)} Explanation:\n` +
+            `Label: ${label}\n` +
+            `Comment: ${comment}\n\n` +
+            `Features contributing to the decision:\n${explanation}`
+        );
+    } catch (error) {
+        console.error(`Error analyzing ${type} LIME explanation:`, error);
+        alert(`An error occurred while analyzing ${type} explanation. Please try again.`);
+    }
+}
+    </script>
+
+    <!-- Include Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

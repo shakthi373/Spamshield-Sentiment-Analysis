@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+    <link rel="icon" type="image/x-icon" href="static/img/icon.jpg">
+
+    <style>
+      body {
+  background-color: transparent;
+  background-image: url("../static/img/bg1.png");
+ background-size: cover;
+}
+
+.login-page {
+  width: 360px;
+  padding: 2% 0 0;
+  margin: auto;
+  background-color: transparent;
+  
+}
+
+.avatar {
+  width: 120%;
+  text-align: center;
+  margin-bottom: 70px;
+  
+}
+
+.avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 30%;
+}
+.login {
+    font-size: 50px;
+    font-weight: bold;
+    color: rgb(66, 195, 255);
+    margin-top: 0.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.form {
+  height: 30em;
+    width: 25em;
+    backdrop-filter: blur(10px);
+    border: 2px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 50px;
+    box-shadow: 0px 0px 5px white;
+}
+
+
+.form button {
+  width: 90%;
+    padding: 10px;
+    margin-top: 1rem;
+    font-size: 25px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+
+
+.form h2 {
+  color: #333333;
+  font-size: 28px;
+  margin: 0 0 30px;
+}
+
+.form p.message {
+  color: #666666;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.form p.message a {
+  color: #2196F3;
+  text-decoration: none;
+}
+
+.form p.message a:hover {
+  text-decoration: underline;
+}
+
+.email,
+.password {
+    width: 90%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    margin: 0.5rem;
+    position: relative;
+}
+
+.email input,
+.password input {
+    padding: 8px 8px 8px 15px;
+    background: white;
+    border: none;
+    width: 100%;
+    border: 1px solid #cecece;
+    border-radius: 50px;
+    font-size: 17px;
+    outline: none;
+    font-weight: bold;
+}
+
+.email input::placeholder,
+.password input::placeholder {
+    color: black;
+    font-weight: bold;
+}
+
+.email img,
+.password img {
+    position: absolute;
+    right: 0.7rem;
+}
+.log {
+    width: 90%;
+    padding: 10px;
+    margin-top: 1rem;
+    font-size: 25px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="login-page">
+      <div class="avatar">
+        <img src="../static/analysis.png" alt="Avatar">
+      </div>
+      <div class="form">
+        <div class="login">Login</div> 
+        <form action="/login" method="POST">
+         <div class="email"> <input type="text" name="username" placeholder="Username" required></div>
+          <div class="password"><input type="password" name="password" placeholder="Password" required></div>
+          <div class="log"><button type="submit">Log in</button></div>
+        </form>      
+        <p class="message">Not registered? <a href="signup">Create an account</a></p>
+        {% if message %}
+        <p style="color: red;">{{ message }}</p>
+        {% endif %}
+        <!-- <p class="message">Forgot your password? <a href="#">Click here to reset it</a></p> -->
+      </div>
+    </div>
+  </body>
+</html>
