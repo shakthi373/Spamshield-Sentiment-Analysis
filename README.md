@@ -28,7 +28,6 @@ SpamShield is a **full-stack chat moderation system** that uses **Natural Langua
 
 ## 📊 Architecture Overview
 ```
-User → React Frontend → REST API → Python Microservices → ML Models → MongoDB → Dashboard
 ```
 - Frontend displays real-time flagged messages & analytics.
 - Backend API classifies and processes incoming chat data.
@@ -106,16 +105,16 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ---
 
 ## 📄 License
-[MIT](LICENSE)
+to be licensed
 
 ---
 
 ## 🌐 Live Demo (Optional if deployed)
-> [https://spamshield-demo.example.com](#)
+> coming soon...
 
 ---
 
 ## 🔗 Links
-- 🔥 [GitHub Repository](https://github.com/shakthi373/spamshield)
+- 🔥 [GitHub Repository](https://github.com/shakthi373/spamshield-Sentiment-Analysis)
 - 📖 [Project Documentation](#)
 - 📝 [LinkedIn](https://www.linkedin.com/in/shakthi-prasad-v-u)
